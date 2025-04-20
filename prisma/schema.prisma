@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model contratotrabalho {
+  id Int @id @default(autoincrement())
+  nivelTecnico Int
+  cargaHoraria String
+  status String
+  inicioVigencia DateTime @default(now())
+  fimVigencia DateTime
+  usuario usuario[]
+}
+
+model categoriapai{
+  id Int @id @default(autoincrement())
+  descricao String
+  status String
+  inicioVigencia DateTime @default(now())
+  fimVigencia DateTime
+
+  Tecnologia tecnologia[]
+}
+
+model usuario{
+  id Int @id @default(autoincrement())
+  nome String
+  nivelAcesso Int
+  status String
+  id_contratoTrabalho Int
+  contratoTrabalho contratotrabalho @relation(fields: [id_contratoTrabalho], references: [id]) 
+  inicioVigencia DateTime @default(now())
+  fimVigencia DateTime
+
+  Tecnologia tecnologia[]
+}
+
+model tecnologia{
+  id Int @id @default(autoincrement())
+  nome String
+  status String
+  id_usuarioResponsavel Int
+  Usuario usuario @relation(fields: [id_usuarioResponsavel], references: [id])
+  id_categoriaPai Int
+  categoriaPai  categoriapai @relation(fields: [id_categoriaPai], references: [id])
+  inicioVigencia DateTime @default(now())
+  fimVigencia DateTime
+}
+
+model tecnico{
+  id Int @id @default(autoincrement())
+  id_usuario Int
+  id_tecnologia Int
+  knowhow String
+  status String
+  dataInicio DateTime @default(now())
+  dataFim DateTime
+}
