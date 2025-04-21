@@ -29,6 +29,16 @@ export class UsuarioService {
     )
   }
 
+  async findOne(id: number): Promise <Usuario> {
+    const usuario = await this.prisma.usuario.findUnique({
+      where: {
+        id
+      }
+    })
+
+    return this.mapToEntity(usuario);
+  }
+
   async create(CreateUsuarioDto: CreateUsuarioDto): Promise <Usuario>{
     const usuario = await this.prisma.usuario.create({
       data: CreateUsuarioDto
@@ -37,15 +47,30 @@ export class UsuarioService {
     return this.mapToEntity(usuario);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise <Usuario> {
+    const usuario = await this.prisma.usuario.update({
+      where:{
+        id
+      },
+      data: {
+        nome: updateUsuarioDto.nome,
+        status: updateUsuarioDto.status,
+        id_contratoTrabalho: updateUsuarioDto.id_contratoTrabalho,
+        nivelAcesso: updateUsuarioDto.nivelAcesso,
+        fimVigencia: updateUsuarioDto.fimVigencia
+      }
+    });
+
+    return this.mapToEntity(usuario);
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
-  }
+  async remove(id: number): Promise <Usuario> {
+    const usuario = await this.prisma.usuario.delete({
+      where: {
+        id
+      }
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+    return this.mapToEntity(usuario);
   }
 }

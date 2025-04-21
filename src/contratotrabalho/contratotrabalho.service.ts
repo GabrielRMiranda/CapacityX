@@ -3,6 +3,7 @@ import { CreateContratotrabalhoDto } from './dto/create-contratotrabalho.dto';
 import { UpdateContratotrabalhoDto } from './dto/update-contratotrabalho.dto';
 import { Contratotrabalho } from './entities/contratotrabalho.entity';
 import { PrismaService } from 'prisma/prisma.service';
+import { contratotrabalho } from '@prisma/client';
 
 @Injectable()
 export class ContratotrabalhoService {
@@ -28,6 +29,16 @@ export class ContratotrabalhoService {
     )
   }
 
+  async findOne(id: number): Promise <Contratotrabalho> {
+    const contratotrabalho = await this.prisma.contratotrabalho.findUnique({
+      where: {
+        id
+      }
+    });
+
+    return this.mapToEntity(contratotrabalho);
+  }
+
   async create(createContratotrabalhoDto: CreateContratotrabalhoDto): Promise <Contratotrabalho> {
     const contrato = await this.prisma.contratotrabalho.create({
       data: createContratotrabalhoDto
@@ -36,15 +47,30 @@ export class ContratotrabalhoService {
     return this.mapToEntity(contrato);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contratotrabalho`;
+  async update(id: number, updateContratotrabalhoDto: UpdateContratotrabalhoDto): Promise <Contratotrabalho> {
+    const contratotrabalho = await this.prisma.contratotrabalho.update({
+      where: {
+        id
+      },
+      data: {
+        nivelTecnico: updateContratotrabalhoDto.nivelTecnico,
+        cargaHoraria: updateContratotrabalhoDto.cargaHoraria,
+        status: updateContratotrabalhoDto.status,
+        inicioVigencia: updateContratotrabalhoDto.inicioVigencia,
+        fimVigencia: updateContratotrabalhoDto.fimVigencia
+      }
+    });
+
+    return this.mapToEntity(contratotrabalho);
   }
 
-  update(id: number, updateContratotrabalhoDto: UpdateContratotrabalhoDto) {
-    return `This action updates a #${id} contratotrabalho`;
-  }
+  async remove(id: number): Promise <contratotrabalho> {
+    const contratotrabalho = await this.prisma.contratotrabalho.delete({
+      where: {
+        id
+      }
+    })
 
-  remove(id: number) {
-    return `This action removes a #${id} contratotrabalho`;
+    return this.mapToEntity(contratotrabalho);
   }
 }

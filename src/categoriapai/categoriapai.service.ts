@@ -28,7 +28,7 @@ export class CategoriapaiService {
   }
 
   async findOne(id: number): Promise <Categoriapai> {
-    
+  
     const categoriapai = await this.prisma.categoriapai.findUnique({
       where: {
         id
@@ -36,8 +36,6 @@ export class CategoriapaiService {
     })
 
     return this.mapToEntity(categoriapai);
-
-    //return `This action returns a #${id} categoriapai`;
   }
 
   async create(CreateCategoriapaiDto: CreateCategoriapaiDto): Promise <Categoriapai> {
@@ -65,7 +63,6 @@ export class CategoriapaiService {
   }
 
   async remove(id: number): Promise <Categoriapai> {
-
     const categoriaPai = await this.prisma.categoriapai.delete({
       where: {
         id

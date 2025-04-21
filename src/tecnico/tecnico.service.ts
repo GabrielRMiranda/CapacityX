@@ -29,6 +29,16 @@ export class TecnicoService {
     )
   }
 
+  async findOne(id: number): Promise <Tecnico> {
+    const tecnico = await this.prisma.tecnico.findUnique({
+      where: {
+        id
+      }
+    });
+
+    return this.mapToEntity(tecnico);
+  }
+
   async create(CreateTecnicoDto: CreateTecnicoDto): Promise<Tecnico>{
     const tecnico = await this.prisma.tecnico.create({
       data: CreateTecnicoDto
@@ -37,15 +47,30 @@ export class TecnicoService {
     return this.mapToEntity(tecnico);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tecnico`;
+  async update(id: number, updateTecnicoDto: UpdateTecnicoDto): Promise <Tecnico> {
+    const tecnico = await this.prisma.tecnico.update({
+      where: {
+        id
+      },
+      data: {
+        knowhow: updateTecnicoDto.knowhow,
+        status: updateTecnicoDto.status,
+        id_tecnologia: updateTecnicoDto.id_tecnologia,
+        dataInicio: updateTecnicoDto.dataInicio,
+        dataFim: updateTecnicoDto.dataFim,
+      }
+    })
+
+    return this.mapToEntity(tecnico);
   }
 
-  update(id: number, updateTecnicoDto: UpdateTecnicoDto) {
-    return `This action updates a #${id} tecnico`;
-  }
+  async remove(id: number): Promise <Tecnico> {
+    const tecnico = await this.prisma.tecnico.delete({
+      where: {
+        id
+      }
+    })
 
-  remove(id: number) {
-    return `This action removes a #${id} tecnico`;
+    return this.mapToEntity(tecnico);
   }
 }
